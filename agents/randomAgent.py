@@ -1,5 +1,5 @@
 import gym
-
+import numpy as np
 
 class RandomAgent(object):
     """docstring for RandomAgent."""
@@ -16,3 +16,7 @@ class RandomAgent(object):
 
     def state(self,observation,reward,done):
         return self.observation_space.sample()
+
+    def actionPolicy(self,policy):
+        action = np.max(policy)
+        return action

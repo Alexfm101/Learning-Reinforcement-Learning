@@ -11,6 +11,7 @@ env = gym.make('MountainCar-v0')
 
 #define agent
 
+
 agent = RandomAgent(env.action_space,env.observation_space)
 
 reward = 0
@@ -26,6 +27,7 @@ for episodes in range(5):
 
     print("estado inicial")
     print(env.observation_space.sample())
+
     count = 0
     while True:
         env.render()
