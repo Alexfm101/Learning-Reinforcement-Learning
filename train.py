@@ -7,7 +7,7 @@ import numpy as np
 
 #define enviroment
 
-env = gym.make('CartPole-v1')
+env = gym.make('MountainCar-v0')
 
 #define agent
 
@@ -39,6 +39,8 @@ for episodes in range(5):
         observation,reward,done,info = env.step(action)
         print("estado {}".format(count))
         print(state)
+        print("accion")
+        print(action)
         count = count + 1
         if done:
             print("termine")
