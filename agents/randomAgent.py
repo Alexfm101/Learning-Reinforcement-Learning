@@ -4,8 +4,15 @@ import gym
 class RandomAgent(object):
     """docstring for RandomAgent."""
 
-    def __init__(self, action_space):
+    def __init__(self, action_space,observation_space):
         self.action_space = action_space
+        self.observation_space = observation_space
 
-    def action(self,observation,reward,done):
+    def actionSample(self,observation,reward,done):
         return self.action_space.sample()
+
+    def actionSpace(self,observation,reward,done):
+        return self.action_space
+
+    def state(self,observation,reward,done):
+        return self.observation_space.sample()
