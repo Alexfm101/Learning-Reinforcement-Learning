@@ -1,2 +1,2 @@
 # RL-demos
-Reinforcement learning demos for experimentation
+A collection of Reinforcement learning algorithms from basics to advanced using OpenAI gym
