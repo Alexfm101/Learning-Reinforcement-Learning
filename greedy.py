@@ -2,7 +2,7 @@ import gym
 import numpy as np
 
 
-env =  gym.make('Acrobot-v1')
+env =  gym.make('MountainCar-v0')
 
 #variables
 actions = env.action_space
