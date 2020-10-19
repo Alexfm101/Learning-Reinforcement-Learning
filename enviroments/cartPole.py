@@ -1,5 +1,14 @@
 import  gym
-env = gym.make('CartPole-v0')
+import  numpy as np
+env = gym.make('CartPole-v1')
+
+class randomAgent():
+    def  __init__(self):
+        pass
+
+
+
+
 for episode in range(20):
     observation = env.reset()
     for timestep in range(100):
