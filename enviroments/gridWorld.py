@@ -30,16 +30,14 @@ class GridWorldEnv(discrete.DiscreteEnv):
 
     metadata = {'render.modes': ['human', 'ansi']}
 
-    def __init__(self, shape=[M,N]):
-        super(GridWorldEnv, self).__init__(number_state,number_actions,P,isd)
-
+    def __init__(self, shape=[4,4]):
         self.shape = shape
         number_state = np.prod(shape)
         number_actions = 4
         MAX_Y = shape[0]
         MAX_X = shape[1]
-        # it represent the dynamics of the Markov descition process
         P = {}
+        # it represent the dynamics of the Markov descition process
         # We expose the model of the environment for educational purposes
         # This should not be used in any model-free learning algorithm
         self.P = P
@@ -49,6 +47,8 @@ class GridWorldEnv(discrete.DiscreteEnv):
         grid = np.arange(number_state).reshape(shape)
         # array iterator
         player = np.nditer(grid, flags=['multi_index'])
+
+        super(GridWorldEnv, self).__init__(number_state,number_actions,P,isd)
 
         if not isinstance(shape,(list,tuple)) or not len(shape) == 2:
             raise ValueError('shape argument must be a list/tuple of length 2')
@@ -60,7 +60,7 @@ class GridWorldEnv(discrete.DiscreteEnv):
 
             P[s] = {a:  [] for a in range(number_actions)}
 
-            done = lambda s: s == 0 or s == (numbe_state - 1)
+            done = lambda s: s == 0 or s == (number_state - 1)
             reward  = 0.0 if done(s) else -1.0
 
             #in the terminal state
@@ -74,10 +74,10 @@ class GridWorldEnv(discrete.DiscreteEnv):
                 number_state_right = s if x == (MAX_X - 1) else s + 1
                 number_state_down = s if y == (MAX_Y - 1) else s + MAX_X
                 number_state_left = s if x == 0 else s - 1
-                P[s][UP] = [(1.0, number_state_up, reward, is_done(number_state_up))]
-                P[s][RIGHT] = [(1.0, number_state_right, reward, is_done(number_state_right))]
-                P[s][DOWN] = [(1.0, number_state_down, reward, is_done(number_state_down))]
-                P[s][LEFT] = [(1.0, number_state_left, reward, is_done(number_state_left))]
+                P[s][UP] = [(1.0, number_state_up, reward, done(number_state_up))]
+                P[s][RIGHT] = [(1.0, number_state_right, reward, done(number_state_right))]
+                P[s][DOWN] = [(1.0, number_state_down, reward, done(number_state_down))]
+                P[s][LEFT] = [(1.0, number_state_left, reward, done(number_state_left))]
 
             player.iternext()
             pass
@@ -104,7 +104,7 @@ class GridWorldEnv(discrete.DiscreteEnv):
                 rendering = " o "
             if x == 0:
                 rendering = rendering.lstrip()
-            if x = self.shape[1] - 1:
+            if x == self.shape[1] - 1:
                 rendering  = rendering.rstrip()
 
             renderingFile.write(rendering)
