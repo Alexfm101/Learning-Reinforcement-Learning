@@ -31,36 +31,33 @@ class GridWorldEnv(discrete.DiscreteEnv):
     metadata = {'render.modes': ['human', 'ansi']}
 
     def __init__(self, shape=[4,4]):
-        self.shape = shape
-        number_state = np.prod(shape)
-        number_actions = 4
-        MAX_Y = shape[0]
-        MAX_X = shape[1]
-        P = {}
-        # it represent the dynamics of the Markov descition process
-        # We expose the model of the environment for educational purposes
-        # This should not be used in any model-free learning algorithm
-        self.P = P
-        # Initial state distribution is uniform
-        isd = np.ones(number_state) / number_state
-        #world
-        grid = np.arange(number_state).reshape(shape)
-        # array iterator
-        player = np.nditer(grid, flags=['multi_index'])
-
-        super(GridWorldEnv, self).__init__(number_state,number_actions,P,isd)
 
         if not isinstance(shape,(list,tuple)) or not len(shape) == 2:
             raise ValueError('shape argument must be a list/tuple of length 2')
-            pass
+
+        self.shape = shape
+        
+        nS = np.prod(shape)
+        nA = 4
+
+        MAX_Y = shape[0]
+        MAX_X = shape[1]
+
+        # it represent the dynamics of the Markov descition process
+        P = {}
+        #world
+        grid = np.arange(nS).reshape(shape)
+        # array iterator
+        player = np.nditer(grid, flags=['multi_index'])
+
 
         while not player.finished:
             s = player.iterindex
             y,x = player.multi_index #position of the player
 
-            P[s] = {a:  [] for a in range(number_actions)}
+            P[s] = {a:  [] for a in range(nA)}
 
-            done = lambda s: s == 0 or s == (number_state - 1)
+            done = lambda s: s == 0 or s == (nS - 1)
             reward  = 0.0 if done(s) else -1.0
 
             #in the terminal state
@@ -80,16 +77,24 @@ class GridWorldEnv(discrete.DiscreteEnv):
                 P[s][LEFT] = [(1.0, number_state_left, reward, done(number_state_left))]
 
             player.iternext()
-            pass
+            
+        # We expose the model of the environment for educational purposes
+        # This should not be used in any model-free learning algorithm
+        self.P = P
+        # Initial state distribution is uniform
+        isd = np.ones(nS) / nS
+
+        super(GridWorldEnv, self).__init__(nS,nA,P,isd)
+        
     def render(self,mode='human',close=False):
         """ render the gridWorld for visualization """
         if close:
             return
-            pass
+            
 
         renderingFile = io.StringIO() if mode == 'ansi' else sys.stdout
 
-        grid = np.arange(self.number_state).reshape(self.shape)
+        grid = np.arange(self.nS).reshape(self.shape)
         player = np.nditer(grid, flags=['multi_index'])
 
         while not player.finished:
@@ -98,7 +103,7 @@ class GridWorldEnv(discrete.DiscreteEnv):
 
             if self.s == s:
                 rendering = " X "
-            elif s == 0 or s == self.number_state - 1:
+            elif s == 0 or s == self.nS - 1:
                 rendering = " T "
             else:
                 rendering = " o "
